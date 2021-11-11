@@ -22,5 +22,9 @@ export default {
 <style lang="less">
 .home {
   display: flex;
+
+  @media @tablets {
+    flex-direction: column;
+  }
 }
 </style>
