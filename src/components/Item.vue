@@ -1,5 +1,5 @@
 <template>
-  <div class="item">
+  <div class="item" @click="addToCart">
     <div class="container">
       <div class="item--tag" v-if="item.offer">Oferta</div>
       <img class="item--img" :src="imagePath" />
@@ -17,13 +17,16 @@ export default {
   name: "Item",
   filters: {
     currency(value) {
-      return `R$ ${value.toLocaleString("pt-br", {
-        minimumFractionDigits: 2,
-      })}`;
-    },
+      return `R$ ${value.toLocaleString("pt-br", { minimumFractionDigits: 2,})}`;
+    }
   },
   props: {
-    item: {},
+    item: {}
+  },
+  methods: {
+    addToCart() {
+      this.$store.dispatch('addToCart', this.item);
+    }
   },
   computed: {
     selectedCategory() {
