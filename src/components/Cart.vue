@@ -14,9 +14,11 @@
 <script>
 import CartItem from './CartItem';
 import {mapGetters} from 'vuex';
+import Mixin from '@/mixins/mixins';
 
 export default {
     name: 'Cart',
+    mixins: [Mixin],
     components: {
         CartItem
     },

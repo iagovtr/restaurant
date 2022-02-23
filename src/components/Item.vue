@@ -19,6 +19,7 @@ export default {
   mixins: [Mixin],
   filters: {
     currency(value) {
+      if(!value) return;
       return `R$ ${value.toLocaleString("pt-br", { minimumFractionDigits: 2,})}`;
     }
   },
@@ -34,6 +35,7 @@ export default {
   },
   computed: {
     imagePath() {
+      if(!this.item?.id) return;
       return require(`../assets/images/${this.item.id}.png`);
     },
   },
