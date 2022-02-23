@@ -22,7 +22,9 @@ export default {
       isLoading: false,
     };
   },
-  created() {},
+  created() {
+    this.getItemsList();
+  },
   computed: {
     selectedCategory() {
       return this.$store.state.selectedCategory;
@@ -57,6 +59,7 @@ export default {
   display: flex;
   width: 100%;
   flex-wrap: wrap;
+  align-content: flex-start;
 
   @media @tablets {
     flex-wrap: wrap;
