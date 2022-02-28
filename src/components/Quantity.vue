@@ -7,8 +7,8 @@
             <div class="modal-content">
                 <h2>Deseja remover este item do carrinho?</h2>
                 <div class="buttons">
-                    <button class="primary-button">Sim, remover</button>
-                    <button class="secondary-button">Cancelar</button>
+                    <button class="primary-button" @click="onRemoveButton()">Sim, remover</button>
+                    <button class="secondary-button" @click="onCancelButton()">Cancelar</button>
                 </div>
             </div>
         </Modal>  
@@ -53,6 +53,16 @@ export default {
                 return;
             }
             ++this.item.quantity;
+        },
+        onCancelButton() {
+            this.increaseQuantity(this.item.id);
+            this.showModal = false;
+        },
+        onRemoveButton() {
+            this.showModal = false;
+            this.$nextTick(() => {
+                this.$store.dispatch('removeFromCart', this.item.id);
+            });
         }
     },    
 }
