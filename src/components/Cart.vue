@@ -10,14 +10,11 @@
           <span>Total: </span>
           <span class="price">{{getCartTotal | currency}}</span>
       </div>
-      <button @click="showModal = true">open modal</button>
-      <Modal :show="showModal" @on-modal-close="showModal = false">iepa</Modal>
   </div>
 </template>
 
 <script>
 import CartItem from './CartItem';
-import Modal from './Modal.vue';
 import {mapGetters} from 'vuex';
 import Mixin from '@/mixins/mixins';
 
@@ -26,18 +23,12 @@ export default {
     mixins: [Mixin],
     components: {
         CartItem,
-        Modal
     },
     filters: {
         currency(value) {
             return `R$ ${value.toLocaleString("pt-br", { minimumFractionDigits: 2,})}`;
         }
     },
-    data() {
-        return {
-            showModal: false
-        }
-    },      
     computed: {
         ...mapGetters([
             'getCartTotal'
