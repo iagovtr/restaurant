@@ -22,15 +22,15 @@
             <p class="section-title">Endereço</p>
             <div class="delivery-type">
                 <div class="radio-options">
-                    <input type="radio" name="delivery-type" id="store" checked>
+                    <input type="radio" name="delivery-type" id="store" value="store" v-model="deliveryType">
                     <label for="store">Retirar na loja</label>
                 </div>
                 <div class="radio-options">
-                    <input type="radio" name="delivery-type" id="delivery">
+                    <input type="radio" name="delivery-type" id="delivery" value="delivery" v-model="deliveryType">
                     <label for="delivery">Delivery</label>
                 </div>
             </div>
-            <a @click="onShowAddressModal()">Adicionar Endereço</a>
+            <a @click="onShowAddressModal()" v-if="isDeliveryType">{{addressButtonLabel}}</a>
         </div>
     </form>
     <button class="primary-button" @click="orderItens()">Concluir pedido</button>
@@ -65,7 +65,7 @@
 
             </div>
             <button class="secondary-button" @click="hideAddressModal">Cancelar</button>
-            <button class="primary-button" @click="saveObservation()">Adicionar</button>
+            <button class="primary-button" @click="validateAddressForm()">Adicionar</button>
         </div>
     </Modal>
   </div>
@@ -87,7 +87,7 @@ export default {
                     placeholder: 'Digite seu nome',
                     valid: true,
                     isValid: () => {
-                        this.formData.name.valid = this.formData.name.value.length;
+                        this.formData.name.valid = !!this.formData.name.value.length;
                     }
                 },
                 cellphone: {
@@ -107,7 +107,7 @@ export default {
                     placeholder: 'Digite seu CEP',
                     valid: true,
                     isValid: () => {
-                        this.formData.cep.valid = this.formData.cep.value.length;
+                        this.formData.cep.valid = !!this.formData.cep.value.length;
                     }
                 },
                 city: {
@@ -117,7 +117,7 @@ export default {
                     placeholder: 'Digite sua Cidade',
                     valid: true,
                     isValid: () => {
-                        this.formData.city.valid = this.formData.city.value.length;
+                        this.formData.city.valid = !!this.formData.city.value.length;
                     }
                 },
                 street: {
@@ -127,7 +127,7 @@ export default {
                     placeholder: 'Digite sua rua',
                     valid: true,
                     isValid: () => {
-                        this.formData.street.valid = this.formData.street.value.length;
+                        this.formData.street.valid = !!this.formData.street.value.length;
                     }
                 },
                 number: {
@@ -137,18 +137,49 @@ export default {
                     placeholder: 'Digite o número',
                     valid: true,
                     isValid: () => {
-                        this.formData.number.valid = this.formData.number.value.length;
+                        this.formData.number.valid = !!this.formData.number.value.length;
                     }
                 },
 
             },
-            showAddressModal: false
+            showAddressModal: false,
+            deliveryType: 'store'
+        }
+    },
+    computed: {
+        isAddressFormValid() {
+            let isValid = true;
+            isValid &= this.formData.cep.valid;
+            isValid &= this.formData.city.valid;
+            isValid &= this.formData.street.valid;
+            isValid &= this.formData.number.valid;
+            return isValid;
+        },
+        isDeliveryType() {
+            return this.deliveryType === 'delivery'
+        },
+        hasAddressInfo() {
+            return (
+                this.formData.cep.value ||
+                this.formData.city.value ||
+                this.formData.street.value ||
+                this.formData.number.value
+            );
+        },
+        addressButtonLabel() {
+            return this.hasAddressInfo ? 'Editar endereço' : 'Adicionar Endereço';
         }
     },
     methods: {
         triggerValidations() {
             this.formData.name.isValid();
             this.formData.cellphone.isValid();
+        },
+        triggerAddressFormValidations() {
+            this.formData.cep.isValid();
+            this.formData.city.isValid();
+            this.formData.street.isValid();
+            this.formData.number.isValid();
         },
         orderItens() {
             this.triggerValidations();
@@ -158,6 +189,10 @@ export default {
         },
         hideAddressModal() {
             this.showAddressModal = false;
+        },
+        validateAddressForm() {
+           this.triggerAddressFormValidations();
+           if(!this.isAddressFormValid) return;
         }
     }
 }
@@ -198,6 +233,11 @@ export default {
                 width: 30%;
                 margin-left: 15px;
             }
+
+            .error-message {
+                font-size: 12px;
+                color: @error-color;
+            }
         }
     }
 
@@ -212,11 +252,6 @@ export default {
             margin-bottom: 20px;
         }
 
-        .error-message {
-            font-size: 12px;
-            color: @error-color;
-        }
-
         .address {
             .delivery-type {
                 display: flex;
@@ -227,6 +262,9 @@ export default {
                 font-size: 12px;
                 text-decoration: underline;
                 cursor: pointer;
+                margin: 15px 0;
+                display: block;
+                width: fit-content;
             }
         }
 
