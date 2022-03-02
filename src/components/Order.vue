@@ -30,6 +30,12 @@
                     <label for="delivery">Delivery</label>
                 </div>
             </div>
+
+            <div class="address-card" v-if="isDeliveryType && saveAddress">
+                <p>{{formData.city.value}}, {{formData.cep.value}}</p>
+                <p>{{formData.street.value}}, {{formData.number.value}}</p>
+            </div>
+
             <a @click="onShowAddressModal()" v-if="isDeliveryType">{{addressButtonLabel}}</a>
         </div>
     </form>
@@ -143,7 +149,8 @@ export default {
 
             },
             showAddressModal: false,
-            deliveryType: 'store'
+            deliveryType: 'store',
+            saveAddress : false
         }
     },
     computed: {
@@ -193,6 +200,9 @@ export default {
         validateAddressForm() {
            this.triggerAddressFormValidations();
            if(!this.isAddressFormValid) return;
+            this.saveAddress = true;
+            this.showAddressModal = false;
+
         }
     }
 }
@@ -265,6 +275,20 @@ export default {
                 margin: 15px 0;
                 display: block;
                 width: fit-content;
+            }
+
+            .address-card {
+                border-radius: 8px;
+                border: 1px solid @dark-grey;
+                padding: 10px 20px;
+                margin-top: 15px;
+                width: fit-content;
+
+                p {
+                    font-size: 14px;    
+                    color: @dark-grey;
+                    margin: 5px 0;
+                }
             }
         }
 
