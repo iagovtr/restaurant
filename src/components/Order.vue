@@ -44,11 +44,11 @@
             <div class="radio-container">
                 <div class="radio-options">
                     <input type="radio" name="payment-type" id="credit-card" value="credit-card" v-model="paymentType">
-                    <label for="store">Cartão</label>
+                    <label for="credit-card">Cartão</label>
                 </div>
                 <div class="radio-options">
                     <input type="radio" name="payment-type" id="cash" value="cash" v-model="paymentType">
-                    <label for="store">Dinheiro</label>
+                    <label for="cash">Dinheiro</label>
                 </div>
             </div>
         </div>
@@ -88,11 +88,25 @@
             <button class="primary-button" @click="validateAddressForm()">Adicionar</button>
         </div>
     </Modal>
+
+    <Modal :show="showInvalidAddressModal" @on-modal-close="hideInvalidAddressModal">
+        <div class="invalid-address-modal">
+            <span v-html="warningIcon" class="icon"></span>
+            <span>Adicione um endereço válido.</span>
+        </div>
+    </Modal>
+    <Modal :show="showSuccessModal" @on-modal-close="hideSuccessModal">
+        <div class="success-modal">
+            <span v-html="successIcon" class="icon"></span>
+            <span>Pedido realizado com sucesso!</span>
+        </div>
+    </Modal>
   </div>
 </template>
 
 <script>
-import Modal from '@/components/Modal'
+import Modal from '@/components/Modal';
+import feather from 'feather-icons';
 export default {
     components: {
         Modal
@@ -163,18 +177,32 @@ export default {
 
             },
             showAddressModal: false,
+            showInvalidAddressModal: false,
+            showSuccessModal: false,
             deliveryType: 'store',
             saveAddress : false,
             paymentType: 'credit-card'
         }
     },
     computed: {
+        warningIcon() {
+            return feather.icons['alert-triangle'].toSvg()
+        },
+        successIcon() {
+            return feather.icons['check-circle'].toSvg()
+        },
         isAddressFormValid() {
             let isValid = true;
             isValid &= this.formData.cep.valid;
             isValid &= this.formData.city.valid;
             isValid &= this.formData.street.valid;
             isValid &= this.formData.number.valid;
+            return isValid;
+        },
+        isUserFormDataValid() {
+            let isValid = true;
+            isValid &= this.formData.cellphone.valid;
+            isValid &= this.formData.name.valid;
             return isValid;
         },
         isDeliveryType() {
@@ -196,6 +224,10 @@ export default {
         triggerValidations() {
             this.formData.name.isValid();
             this.formData.cellphone.isValid();
+            if(this.isDeliveryType) {
+                this.triggerAddressFormValidations();
+                this.showInvalidAddressModal = !this.isAddressFormValid;
+            }
         },
         triggerAddressFormValidations() {
             this.formData.cep.isValid();
@@ -205,6 +237,8 @@ export default {
         },
         orderItens() {
             this.triggerValidations();
+            if(!this.isUserFormDataValid || !this.isAddressFormValid) return;
+            this.showSuccessModal = true;
         },
         onShowAddressModal() {
             this.showAddressModal = true;
@@ -217,7 +251,12 @@ export default {
            if(!this.isAddressFormValid) return;
             this.saveAddress = true;
             this.showAddressModal = false;
-
+        },
+        hideInvalidAddressModal() {
+            this.showInvalidAddressModal = false;
+        },
+        hideSuccessModal() {
+            this.$router.push({name: 'Home'});
         }
     }
 }
@@ -244,6 +283,11 @@ export default {
         & + .input-field {
             margin-top: 10px;
         }
+
+        .error-message {
+            font-size: 12px;
+            color: @error-color;
+        }
     }
 
     .address-container {
@@ -257,11 +301,6 @@ export default {
             & + .input-field {
                 width: 30%;
                 margin-left: 15px;
-            }
-
-            .error-message {
-                font-size: 12px;
-                color: @error-color;
             }
         }
     }
@@ -329,6 +368,35 @@ export default {
 
             & + button {
                 margin-left: 15px;
+            }
+        }
+    }
+
+    .invalid-address-modal, .success-modal {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding-bottom: 20px;
+
+        .icon {
+            margin-bottom: 10px;
+        }
+    }
+
+    @media @tablets {
+        width: 100%;
+        padding: 0;
+
+        .modal-content {
+            button + button {
+                margin-left: 5px;
+            }
+        }
+
+        .address-container {
+            .input-field + .input-field {
+                margin-left: 5px;
             }
         }
     }

@@ -1,12 +1,7 @@
 <template>
   <div class="category-menu">
     <ul>
-      <li
-        v-for="category in categoriesList"
-        :key="category.id"
-        @click="onCategoryClick(category.id)"
-        :class="{ active: isActive(category.id) }"
-      >
+      <li v-for="category in categoriesList" :key="category.id" @click="onCategoryClick(category.id)" :class="{ active: isActive(category.id) }">
         <component :is="category.icon" />
         <p>{{ category.label }}</p>
       </li>
