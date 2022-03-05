@@ -10,35 +10,29 @@
 </template>
 
 <script>
-import Pizza from "../assets/icons/pizza.svg";
-import Combo from "../assets/icons/french-fries.svg";
+import Fondue from "../assets/icons/fondue.svg";
 import Deserts from "../assets/icons/ice-cream.svg";
 import Drinks from "../assets/icons/smothie.svg";
-import Burguer from "../assets/icons/food.svg";
 
 export default {
   name: "CategoryMenu",
   components: {
-    Pizza,
-    Combo,
+    Fondue,
     Deserts,
     Drinks,
-    Burguer,
   },
   data() {
     return {
       categoriesList: [
-        { label: "Pizza", icon: "Pizza", id: "pizza" },
+        { label: "Fondues", icon: "Fondue", id: "fondue" },
         { label: "Bebidas", icon: "Drinks", id: "drinks" },
-        { label: "Doces", icon: "Deserts", id: "deserts" },
-        { label: "Combos", icon: "Combo", id: "combo" },
-        { label: "Burguers", icon: "Burguer", id: "burguers" },
+        { label: "Açaís", icon: "Deserts", id: "deserts" },
       ],
       selectedCategory: "",
     };
   },
   mounted() {
-    this.onCategoryClick("pizza");
+    this.onCategoryClick("fondue");
   },
   methods: {
     onCategoryClick(id) {
@@ -58,7 +52,6 @@ export default {
   min-width: 130px;
   height: 100vh;
   background: white;
-
   display: flex;
   align-items: center;
 
@@ -73,6 +66,7 @@ export default {
       align-items: center;
       justify-content: center;
       height: 100px;
+      cursor: pointer;
 
       p {
         margin-bottom: 0px;
@@ -82,6 +76,7 @@ export default {
       }
 
       svg {
+        height: 41px;
         path {
           fill: @dark-grey;
         }
