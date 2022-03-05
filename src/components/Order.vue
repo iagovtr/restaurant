@@ -43,11 +43,11 @@
             <p>Método de pagamento</p>
             <div class="radio-container">
                 <div class="radio-options">
-                    <input type="radio" name="payment-type" id="credit-card" value="credit-card" v-model="paymentType">
+                    <input type="radio" name="payment-type" id="credit-card" value="Cartão" v-model="paymentType">
                     <label for="credit-card">Cartão</label>
                 </div>
                 <div class="radio-options">
-                    <input type="radio" name="payment-type" id="cash" value="cash" v-model="paymentType">
+                    <input type="radio" name="payment-type" id="cash" value="Dinheiro" v-model="paymentType">
                     <label for="cash">Dinheiro</label>
                 </div>
             </div>
@@ -239,6 +239,24 @@ export default {
             this.triggerValidations();
             if(!this.isUserFormDataValid || !this.isAddressFormValid) return;
             this.showSuccessModal = true;
+            const phone = '5511958360716';
+            let text = `
+                Cliente: ${this.formData.name.value}
+                Contato: ${this.formData.cellphone.value}
+                Tipo de delivery: ${this.deliveryType}
+                Endereço: ${this.formData.street.value}, ${this.formData.number.value} - CEP: ${this.formData.cep.value}
+                ${this.formData.city.value}
+                Pagamento: ${this.paymentType}
+                Pedido:
+                ${this.$store.state.cartList.map(item => {
+                    return `
+                    ${item.quantity}x${item.name}
+                    Obs: ${item.observations}
+                    `
+                })}
+                `
+            text = window.encodeURIComponent(text);
+            window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${text}`)
         },
         onShowAddressModal() {
             this.showAddressModal = true;
@@ -384,9 +402,10 @@ export default {
         }
     }
 
-    @media @tablets {
+    @media @small-desktops {
         width: 100%;
-        padding: 0;
+        max-width: 800px;
+        padding: 20px;
 
         .modal-content {
             button + button {
@@ -399,6 +418,10 @@ export default {
                 margin-left: 5px;
             }
         }
+    }
+
+    @media @smartphones {
+        padding: 0;
     }
 }
 </style>

@@ -7,7 +7,7 @@
       <Quantity :item="item" :useStore="false"/>
     </div>
     <p class="add-cart--observations">Observações:</p>
-    <textarea v-model="item.observations" rows="10"></textarea>
+    <textarea v-model="item.observations" rows="7"></textarea>
     <button class="primary-button" @click="onAddToCartButtonClick()">Adicionar ao carrinho</button>
   </div>
 </template>
@@ -36,6 +36,9 @@ export default {
     },
   },
   created() {
+    if(this.isDesktop()) {
+      this.$router.push({name: 'Home'});
+    }
     axios
       .get(`http://localhost:3000/${this.selectedCategory}/${this.id}`).then((response) => {
         this.item = { quantity: 1, observations: '', ...response.data};
@@ -53,6 +56,8 @@ export default {
 <style lang="less" scoped>
 
   .add-cart {
+    max-width: 600px;
+    margin: auto;
     padding: 50px 20px;
 
     &--go-back {
@@ -63,7 +68,7 @@ export default {
     }
 
     &--item {
-      margin-top: 50px;
+      margin: 20px auto;
     }
 
     &--container {
@@ -92,10 +97,18 @@ export default {
 
     button {
       width: calc(100% - 40px);
-      position: fixed;
-      bottom: 30px;
-      left: 20px;
-      right: 20px;
+      max-width: 300px;
+      display: block;
+      margin: 30px auto;
+    }
+
+    @media @smartphones {
+      button {
+        position: fixed;
+        bottom: 30px;
+        width: calc(100% - 40px);
+        max-width: unset;
+      }
     }
   }
 

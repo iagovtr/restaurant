@@ -12,7 +12,7 @@
             <span>Total: </span>
             <span class="price">{{getCartTotal | currency}}</span>
         </div>
-        <button class="primary-button payment-button" @click="goToPayment()">Finalizar compra</button>
+        <button class="primary-button payment-button" v-if="cartList.length && !isPaymentScreen" @click="goToPayment()">Finalizar compra</button>
     </div>
 </template>
 
@@ -42,6 +42,9 @@ export default {
         hasNoItems() {
             return !this.cartList.length;
         },
+        isPaymentScreen() {
+            return this.$route.name === 'Payment'
+        }
     },
     methods: {
         goToPayment() {
@@ -55,9 +58,9 @@ export default {
     .cart {
         background: white;
         height: 100vh;
-        width: 643px;
-        min-width: 643px;
-        padding: 50px;
+        width: 600px;
+        min-width: 600px;
+        padding: 30px 30px 100px 30px;
         display: flex;
         flex-direction: column;
 
@@ -97,8 +100,10 @@ export default {
             margin:  auto;
         }
 
-        @media @tablets {
+        @media @small-desktops {
             width: 100%;
+            max-width: 800px;
+            margin: auto;
             min-width: unset;
             padding: 50px 20px 20px;
 
