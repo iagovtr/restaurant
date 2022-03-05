@@ -239,18 +239,17 @@ export default {
             this.triggerValidations();
             if(!this.isUserFormDataValid || !this.isAddressFormValid) return;
             this.showSuccessModal = true;
-            const phone = '5511958360716';
+            const phone = '5511999999999';
             let text = `
                 Cliente: ${this.formData.name.value}
                 Contato: ${this.formData.cellphone.value}
-                Tipo de delivery: ${this.deliveryType}
                 Endereço: ${this.formData.street.value}, ${this.formData.number.value} - CEP: ${this.formData.cep.value}
                 ${this.formData.city.value}
                 Pagamento: ${this.paymentType}
                 Pedido:
                 ${this.$store.state.cartList.map(item => {
                     return `
-                    ${item.quantity}x${item.name}
+                    ${item.quantity}x ${item.name}
                     Obs: ${item.observations}
                     `
                 })}
@@ -275,6 +274,7 @@ export default {
         },
         hideSuccessModal() {
             this.$router.push({name: 'Home'});
+            this.$router.go({name: 'Home'});
         }
     }
 }

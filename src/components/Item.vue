@@ -53,9 +53,13 @@ export default {
   position: relative;
   margin: 20px;
   padding: 20px;
-
+  cursor: pointer;
   display: flex;
   flex-direction: column;
+
+  &:hover {
+    box-shadow: 1px 1px 10px @light-grey;
+  }
 
   &--tag {
     position: absolute;
